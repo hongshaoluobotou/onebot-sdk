@@ -1,10 +1,8 @@
 package cn.evole.onebot.sdk.util;
 
 /**
- * @Project: onebot-sdk
- * @Author: cnlimiter
- * @CreateTime: 2024/2/2 12:42
- * @Description:
+ * @author cnlimiter
+ * @since 2024/2/2 12:42
  */
 
 public class StringUtils {

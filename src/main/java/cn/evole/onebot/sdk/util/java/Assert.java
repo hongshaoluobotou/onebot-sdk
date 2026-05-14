@@ -22,6 +22,7 @@ public final class Assert {
      *
      * @param expression boolean 值
      * @param message    消息
+     * @param params     消息格式化参数
      */
     public static void isTrue(boolean expression, String message, Object... params) {
         if (!expression) {
@@ -35,6 +36,7 @@ public final class Assert {
      *
      * @param expression boolean 值
      * @param message    消息
+     * @param params     消息格式化参数
      */
     public static void isFalse(boolean expression, String message, Object... params) {
         isTrue(!expression, message, params);
@@ -46,6 +48,7 @@ public final class Assert {
      *
      * @param object  对象
      * @param message 消息
+     * @param params  消息格式化参数
      */
     public static void isNull(Object object, String message, Object... params) {
         isTrue(object == null, message, params);
@@ -57,6 +60,7 @@ public final class Assert {
      *
      * @param object  对象
      * @param message 消息
+     * @param params  消息格式化参数
      */
     public static void notNull(Object object, String message, Object... params) {
         isTrue(object != null, message, params);
@@ -68,6 +72,7 @@ public final class Assert {
      *
      * @param value   字符串
      * @param message 消息
+     * @param params  消息格式化参数
      */
     public static void notEmpty(String value, String message, Object... params) {
         isTrue(value != null && value.length() != 0, message, params);
@@ -79,6 +84,7 @@ public final class Assert {
      *
      * @param collection 集合
      * @param message    消息
+     * @param params     消息格式化参数
      */
     public static void notEmpty(Collection<?> collection, String message, Object... params) {
         isTrue(collection != null && collection.size() != 0, message, params);
@@ -90,6 +96,7 @@ public final class Assert {
      *
      * @param map     集合
      * @param message 消息
+     * @param params  消息格式化参数
      */
     public static void notEmpty(Map<?, ?> map, String message, Object... params) {
         isTrue(map != null && map.size() != 0, message, params);
@@ -101,6 +108,7 @@ public final class Assert {
      *
      * @param array   数组
      * @param message 消息
+     * @param params  消息格式化参数
      */
     public static void notEmpty(Object[] array, String message, Object... params) {
         isTrue(array != null && array.length != 0, message, params);

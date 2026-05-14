@@ -259,7 +259,7 @@ public class BotUtils {
 
 
     /**
-     * 从 List<ArrayMsg> 生成 CQ Code
+     * 从 {@code List<ArrayMsg>} 生成 CQ Code
      *
      * @param arrayMsgs {@link ArrayMsg}
      * @return CQ Code
@@ -360,7 +360,9 @@ public class BotUtils {
      * 兼容 Lagrange
      * 生成自定义合并转发消息
      *
-     * @param contents 消息列表，每个元素视为一个消息节点 Object 可为 List<ArrayMsg> 或 CQCode
+     * @param contents 消息列表，每个元素视为一个消息节点，Object 可为 {@code List<ArrayMsg>} 或 CQCode
+     * @param uin      发送者 QQ 号
+     * @param name     发送者显示名字
      * @return 消息结构
      */
     @SuppressWarnings("Duplicates")
@@ -383,7 +385,8 @@ public class BotUtils {
      * 兼容 Lagrange
      * 生成自定义合并转发消息
      *
-     * @param contents 消息列表，每个元素视为一个消息节点 Object 可为 List<ArrayMsg> 或 CQCode
+     * @param contents 消息列表，每个元素视为一个消息节点，Object 可为 {@code List<ArrayMsg>} 或 CQCode
+     * @param bot      机器人实例，用于获取登录信息和版本信息
      * @return 消息结构
      */
     @SuppressWarnings("Duplicates")

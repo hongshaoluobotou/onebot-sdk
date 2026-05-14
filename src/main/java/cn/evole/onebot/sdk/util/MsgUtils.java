@@ -88,7 +88,7 @@ public class MsgUtils {
      * @return {@link String}
      */
     public MsgUtils face(int id) {
-        String faceCode = String.format("[CQ:face,id=%s]", id);
+        String faceCode = String.format("[CQ:face,id=%s", id);
         stringBuffer.append(faceCode);
         return this;
     }

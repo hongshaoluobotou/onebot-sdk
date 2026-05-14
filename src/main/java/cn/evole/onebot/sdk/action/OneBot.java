@@ -14,10 +14,9 @@ import cn.evole.onebot.sdk.response.misc.*;
 import java.util.List;
 
 /**
- * @Project: onebot-sdk
- * @Author: cnlimiter
- * @CreateTime: 2025/2/9 01:37
- * @Description: from Shiro
+ * @author cnlimiter
+ * @since 2025/2/9 01:37
+ * from Shiro
  */
 public interface OneBot {
     /**

@@ -4,10 +4,8 @@ import cn.evole.onebot.sdk.action.misc.ActionData;
 import cn.evole.onebot.sdk.response.group.GroupFilesResp;
 
 /**
- * @Project: onebot-sdk
- * @Author: cnlimiter
- * @CreateTime: 2025/2/9 01:45
- * @Description:
+ * @author cnlimiter
+ * @since 2025/2/9 01:45
  */
 public interface LLOneBotExtend {
 

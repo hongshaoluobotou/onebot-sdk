@@ -22,6 +22,8 @@ java {
     }
     archivesBaseName = project.archives_base_name
 
+    withSourcesJar()
+    withJavadocJar()
 }
 
 

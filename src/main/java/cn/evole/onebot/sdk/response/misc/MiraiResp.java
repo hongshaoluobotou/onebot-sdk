@@ -6,10 +6,8 @@ import com.google.gson.annotations.Expose;
 import lombok.Data;
 
 /**
- * @Project: onebot-sdk
- * @Author: cnlimiter
- * @CreateTime: 2024/1/17 13:56
- * @Description:
+ * @author cnlimiter
+ * @since 2024/1/17 13:56
  */
 
 public class MiraiResp {

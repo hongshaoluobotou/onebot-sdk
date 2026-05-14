@@ -8,10 +8,8 @@ import cn.evole.onebot.sdk.entity.MsgId;
 import java.util.List;
 
 /**
- * @Project: onebot-sdk
- * @Author: cnlimiter
- * @CreateTime: 2025/2/9 01:41
- * @Description: from Shiro
+ * @author cnlimiter
+ * @since 2025/2/9 01:41
  */
 public interface GensokyoExtend {
     /**

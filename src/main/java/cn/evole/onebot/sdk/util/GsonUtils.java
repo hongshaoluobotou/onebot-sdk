@@ -18,9 +18,8 @@ import java.math.BigInteger;
 import java.util.*;
 
 /**
- * Description:
- * Author: cnlimiter
- * Date: 2022/10/1 16:36
+ * @author cnlimiter
+ * @since 2022/10/1 16:36
  * Version: 1.0
  */
 public class GsonUtils {
@@ -53,6 +52,8 @@ public class GsonUtils {
 
     /**
      * 根据对象返回json  过滤空值字段
+     * @param object 对象
+     * @return json
      */
     public static String toJsonStringIgnoreNull(Object object) {
         return GSON.toJson(object);
@@ -60,6 +61,8 @@ public class GsonUtils {
 
     /**
      * 根据对象返回json  不过滤空值字段
+     * @param object 对象
+     * @return json
      */
     public static String toJsonString(Object object) {
         return GSON_NULL.toJson(object);
@@ -80,29 +83,59 @@ public class GsonUtils {
 
     /**
      * 将json转化为对应的实体对象
-     * new TypeToken<List<T>>() {}.getType()
-     * new TypeToken<Map<String, T>>() {}.getType()
-     * new TypeToken<List<Map<String, T>>>() {}.getType()
+     *
+     * <p>使用示例：
+     * <pre>{@code
+     *   // 单个对象
+     *   User user = GsonUtils.fromJson(json, User.class);
+     *
+     *   // List
+     *   List<User> list = GsonUtils.fromJson(json, new TypeToken<List<User>>() {}.getType());
+     *
+     *   // Map
+     *   Map<String, User> map = GsonUtils.fromJson(json, new TypeToken<Map<String, User>>() {}.getType());
+     * }</pre>
+     *
+     * @param <T>     目标对象类型
+     * @param json    要转换的 JSON 字符串
+     * @param typeOfT 目标类型，可通过 {@code new TypeToken<T>(){}.getType()} 获取
+     * @return 转换后的实体对象
      */
     public static <T> T fromJson(String json, Type typeOfT) {
         return GSON.fromJson(json, typeOfT);
     }
 
     /**
-     * 将json转化为对应的实体对象
-     * new TypeToken<List<T>>() {}.getType()
-     * new TypeToken<Map<String, T>>() {}.getType()
-     * new TypeToken<List<Map<String, T>>>() {}.getType()
+     * 将 JSON 字符串转化为对应的实体对象
+     *
+     * <p>使用示例：
+     * <pre>{@code
+     *   // List
+     *   List<User> list = fromJson(json, new TypeToken<List<T>>() {}.getType());
+     *
+     *   // Map
+     *   Map<String, User> map = fromJson(json, new TypeToken<Map<String, T>>() {}.getType());
+     *
+     *   // List<Map>
+     *   List<Map<String, User>> listMap = fromJson(json, new TypeToken<List<Map<String, T>>>() {}.getType());
+     * }</pre>
+     *
+     * @param <T>     目标实体类型
+     * @param json    要转换的 JSON 字符串
+     * @param typeOfT 目标类型，通过 {@code new TypeToken<T>(){}.getType()} 获取
+     * @return 转换后的实体对象
      */
     public static <T> T fromJson(JsonElement json, Type typeOfT) {
         return GSON.fromJson(json, typeOfT);
     }
 
     /**
-     * 转成list
-     * @param gsonString  string类型json
-     * @param cls  class
-     * @return 对象 T
+     * 转成 List
+     *
+     * @param <T>        列表元素类型
+     * @param gsonString JSON 字符串
+     * @param cls        元素类型 Class
+     * @return 对象列表
      */
     public static <T> List<T> convertToList(String gsonString, Class<T> cls) {
         return GSON.fromJson(gsonString, new TypeToken<List<T>>() {
@@ -110,9 +143,11 @@ public class GsonUtils {
     }
 
     /**
-     * 转成list中有map的
-     * @param gsonString  string类型json
-     * @return List<Map<String, T></>>
+     * 转成 List 中有 Map 的
+     *
+     * @param <T>        Map 值类型
+     * @param gsonString JSON 字符串
+     * @return {@code List<Map<String, T>>}
      */
     public static <T> List<Map<String, T>> convertToListMaps(String gsonString) {
         return GSON.fromJson(gsonString, new TypeToken<List<Map<String, String>>>() {
@@ -120,9 +155,11 @@ public class GsonUtils {
     }
 
     /**
-     * 转成map
-     * @param gsonString  string类型json
-     * @return  Map<String, T></>
+     * 转成 Map
+     *
+     * @param <T>        Map 值类型
+     * @param gsonString JSON 字符串
+     * @return {@code Map<String, T>}
      */
     public static <T> Map<String, T> convertToMaps(String gsonString) {
         return GSON.fromJson(gsonString, new TypeToken<Map<String, T>>() {
@@ -131,55 +168,107 @@ public class GsonUtils {
 
 
     /**
-     * Does the given JsonObject contain a string field with the given name?
+     * 判断 JsonObject 中指定字段是否为字符串类型
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @return 是否为字符串类型
      */
     public static boolean isStringValue(JsonObject pJson, String pMemberName) {
         return isValidPrimitive(pJson, pMemberName) && pJson.getAsJsonPrimitive(pMemberName).isString();
     }
 
     /**
-     * Is the given JsonElement a string?
+     * 判断 JsonElement 是否为字符串类型
+     *
+     * @param pJson JsonElement 对象
+     * @return 是否为字符串类型
      */
     public static boolean isStringValue(JsonElement pJson) {
         return pJson.isJsonPrimitive() && pJson.getAsJsonPrimitive().isString();
     }
 
+    /**
+     * 判断 JsonObject 中指定字段是否为数字类型
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @return 是否为数字类型
+     */
     public static boolean isNumberValue(JsonObject pJson, String pMemberName) {
         return isValidPrimitive(pJson, pMemberName) && pJson.getAsJsonPrimitive(pMemberName).isNumber();
     }
 
+    /**
+     * 判断 JsonElement 是否为数字类型
+     *
+     * @param pJson JsonElement 对象
+     * @return 是否为数字类型
+     */
     public static boolean isNumberValue(JsonElement pJson) {
         return pJson.isJsonPrimitive() && pJson.getAsJsonPrimitive().isNumber();
     }
 
+    /**
+     * 判断 JsonObject 中指定字段是否为布尔类型
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @return 是否为布尔类型
+     */
     public static boolean isBooleanValue(JsonObject pJson, String pMemberName) {
         return isValidPrimitive(pJson, pMemberName) && pJson.getAsJsonPrimitive(pMemberName).isBoolean();
     }
 
+    /**
+     * 判断 JsonElement 是否为布尔类型
+     *
+     * @param pJson JsonElement 对象
+     * @return 是否为布尔类型
+     */
     public static boolean isBooleanValue(JsonElement pJson) {
         return pJson.isJsonPrimitive() && pJson.getAsJsonPrimitive().isBoolean();
     }
 
     /**
-     * Does the given JsonObject contain an array field with the given name?
+     * 判断 JsonObject 中指定字段是否为数组类型
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @return 是否为数组类型
      */
     public static boolean isArrayNode(JsonObject pJson, String pMemberName) {
         return isValidNode(pJson, pMemberName) && pJson.get(pMemberName).isJsonArray();
     }
 
+    /**
+     * 判断 JsonObject 中指定字段是否为对象类型
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @return 是否为对象类型
+     */
     public static boolean isObjectNode(JsonObject pJson, String pMemberName) {
         return isValidNode(pJson, pMemberName) && pJson.get(pMemberName).isJsonObject();
     }
 
     /**
-     * Does the given JsonObject contain a field with the given name whose type is primitive (String, Java primitive, or Java primitive wrapper)?
+     * 判断 JsonObject 中指定字段是否为基本类型（String、Java 基本类型或其包装类）
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @return 是否为基本类型
      */
     public static boolean isValidPrimitive(JsonObject pJson, String pMemberName) {
         return isValidNode(pJson, pMemberName) && pJson.get(pMemberName).isJsonPrimitive();
     }
 
     /**
-     * Does the given JsonObject contain a field with the given name?
+     * 判断 JsonObject 中是否包含指定字段
+     *
+     * @param pJson       JsonObject 对象，允许为 null
+     * @param pMemberName 字段名
+     * @return 是否包含该字段
      */
     public static boolean isValidNode(@Nullable JsonObject pJson, String pMemberName) {
         if (pJson == null) {
@@ -189,6 +278,14 @@ public class GsonUtils {
         }
     }
 
+    /**
+     * 获取 JsonObject 中指定字段的非 null 值
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @return 字段对应的 JsonElement
+     * @throws JsonSyntaxException 字段不存在或为 null 时抛出
+     */
     public static JsonElement getNonNull(JsonObject pJson, String pMemberName) {
         JsonElement jsonelement = pJson.get(pMemberName);
         if (jsonelement != null && !jsonelement.isJsonNull()) {
@@ -199,7 +296,12 @@ public class GsonUtils {
     }
 
     /**
-     * Gets the string value of the given JsonElement.  Expects the second parameter to be the name of the element's field if an error message needs to be thrown.
+     * 将 JsonElement 转换为字符串
+     *
+     * @param pJson       JsonElement 对象
+     * @param pMemberName 字段名（用于错误提示）
+     * @return 字符串值
+     * @throws JsonSyntaxException 不是字符串类型时抛出
      */
     public static String convertToString(JsonElement pJson, String pMemberName) {
         if (pJson.isJsonPrimitive()) {
@@ -210,7 +312,12 @@ public class GsonUtils {
     }
 
     /**
-     * Gets the string value of the field on the JsonObject with the given name.
+     * 获取 JsonObject 中指定字符串字段的值
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @return 字符串值
+     * @throws JsonSyntaxException 字段不存在或不是字符串时抛出
      */
     public static String getAsString(JsonObject pJson, String pMemberName) {
         if (pJson.has(pMemberName)) {
@@ -221,7 +328,12 @@ public class GsonUtils {
     }
 
     /**
-     * Gets the string value of the field on the JsonObject with the given name, or the given default value if the field is missing.
+     * 获取 JsonObject 中指定字符串字段的值，不存在时返回默认值
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @param pFallback   默认值
+     * @return 字符串值，或默认值
      */
     @Nullable
     @Contract("_,_,!null->!null;_,_,null->_")
@@ -230,7 +342,12 @@ public class GsonUtils {
     }
 
     /**
-     * Gets the boolean value of the given JsonElement.  Expects the second parameter to be the name of the element's field if an error message needs to be thrown.
+     * 将 JsonElement 转换为布尔值
+     *
+     * @param pJson       JsonElement 对象
+     * @param pMemberName 字段名（用于错误提示）
+     * @return 布尔值
+     * @throws JsonSyntaxException 不是布尔类型时抛出
      */
     public static boolean convertToBoolean(JsonElement pJson, String pMemberName) {
         if (pJson.isJsonPrimitive()) {
@@ -241,7 +358,12 @@ public class GsonUtils {
     }
 
     /**
-     * Gets the boolean value of the field on the JsonObject with the given name.
+     * 获取 JsonObject 中指定布尔字段的值
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @return 布尔值
+     * @throws JsonSyntaxException 字段不存在或不是布尔类型时抛出
      */
     public static boolean getAsBoolean(JsonObject pJson, String pMemberName) {
         if (pJson.has(pMemberName)) {
@@ -252,12 +374,25 @@ public class GsonUtils {
     }
 
     /**
-     * Gets the boolean value of the field on the JsonObject with the given name, or the given default value if the field is missing.
+     * 获取 JsonObject 中指定布尔字段的值，不存在时返回默认值
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @param pFallback   默认值
+     * @return 布尔值，或默认值
      */
     public static boolean getAsBoolean(JsonObject pJson, String pMemberName, boolean pFallback) {
         return pJson.has(pMemberName) ? convertToBoolean(pJson.get(pMemberName), pMemberName) : pFallback;
     }
 
+    /**
+     * 将 JsonElement 转换为 double
+     *
+     * @param pJson       JsonElement 对象
+     * @param pMemberName 字段名（用于错误提示）
+     * @return double 值
+     * @throws JsonSyntaxException 不是数字类型时抛出
+     */
     public static double convertToDouble(JsonElement pJson, String pMemberName) {
         if (pJson.isJsonPrimitive() && pJson.getAsJsonPrimitive().isNumber()) {
             return pJson.getAsDouble();
@@ -266,6 +401,14 @@ public class GsonUtils {
         }
     }
 
+    /**
+     * 获取 JsonObject 中指定 double 字段的值
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @return double 值
+     * @throws JsonSyntaxException 字段不存在或不是数字时抛出
+     */
     public static double getAsDouble(JsonObject pJson, String pMemberName) {
         if (pJson.has(pMemberName)) {
             return convertToDouble(pJson.get(pMemberName), pMemberName);
@@ -274,12 +417,25 @@ public class GsonUtils {
         }
     }
 
+    /**
+     * 获取 JsonObject 中指定 double 字段的值，不存在时返回默认值
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @param pFallback   默认值
+     * @return double 值，或默认值
+     */
     public static double getAsDouble(JsonObject pJson, String pMemberName, double pFallback) {
         return pJson.has(pMemberName) ? convertToDouble(pJson.get(pMemberName), pMemberName) : pFallback;
     }
 
     /**
-     * Gets the float value of the given JsonElement.  Expects the second parameter to be the name of the element's field if an error message needs to be thrown.
+     * 将 JsonElement 转换为 float
+     *
+     * @param pJson       JsonElement 对象
+     * @param pMemberName 字段名（用于错误提示）
+     * @return float 值
+     * @throws JsonSyntaxException 不是数字类型时抛出
      */
     public static float convertToFloat(JsonElement pJson, String pMemberName) {
         if (pJson.isJsonPrimitive() && pJson.getAsJsonPrimitive().isNumber()) {
@@ -290,7 +446,12 @@ public class GsonUtils {
     }
 
     /**
-     * Gets the float value of the field on the JsonObject with the given name.
+     * 获取 JsonObject 中指定 float 字段的值
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @return float 值
+     * @throws JsonSyntaxException 字段不存在或不是数字时抛出
      */
     public static float getAsFloat(JsonObject pJson, String pMemberName) {
         if (pJson.has(pMemberName)) {
@@ -301,14 +462,24 @@ public class GsonUtils {
     }
 
     /**
-     * Gets the float value of the field on the JsonObject with the given name, or the given default value if the field is missing.
+     * 获取 JsonObject 中指定 float 字段的值，不存在时返回默认值
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @param pFallback   默认值
+     * @return float 值，或默认值
      */
     public static float getAsFloat(JsonObject pJson, String pMemberName, float pFallback) {
         return pJson.has(pMemberName) ? convertToFloat(pJson.get(pMemberName), pMemberName) : pFallback;
     }
 
     /**
-     * Gets a long from a JSON element and validates that the value is actually a number.
+     * 将 JsonElement 转换为 long
+     *
+     * @param pJson       JsonElement 对象
+     * @param pMemberName 字段名（用于错误提示）
+     * @return long 值
+     * @throws JsonSyntaxException 不是数字类型时抛出
      */
     public static long convertToLong(JsonElement pJson, String pMemberName) {
         if (pJson.isJsonPrimitive() && pJson.getAsJsonPrimitive().isNumber()) {
@@ -319,7 +490,12 @@ public class GsonUtils {
     }
 
     /**
-     * Gets a long from a JSON element, throws an error if the member does not exist.
+     * 获取 JsonObject 中指定 long 字段的值
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @return long 值
+     * @throws JsonSyntaxException 字段不存在或不是数字时抛出
      */
     public static long getAsLong(JsonObject pJson, String pMemberName) {
         if (pJson.has(pMemberName)) {
@@ -329,12 +505,25 @@ public class GsonUtils {
         }
     }
 
+    /**
+     * 获取 JsonObject 中指定 long 字段的值，不存在时返回默认值
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @param pFallback   默认值
+     * @return long 值，或默认值
+     */
     public static long getAsLong(JsonObject pJson, String pMemberName, long pFallback) {
         return pJson.has(pMemberName) ? convertToLong(pJson.get(pMemberName), pMemberName) : pFallback;
     }
 
     /**
-     * Gets the integer value of the given JsonElement.  Expects the second parameter to be the name of the element's field if an error message needs to be thrown.
+     * 将 JsonElement 转换为 int
+     *
+     * @param pJson       JsonElement 对象
+     * @param pMemberName 字段名（用于错误提示）
+     * @return int 值
+     * @throws JsonSyntaxException 不是数字类型时抛出
      */
     public static int convertToInt(JsonElement pJson, String pMemberName) {
         if (pJson.isJsonPrimitive() && pJson.getAsJsonPrimitive().isNumber()) {
@@ -345,7 +534,12 @@ public class GsonUtils {
     }
 
     /**
-     * Gets the integer value of the field on the JsonObject with the given name.
+     * 获取 JsonObject 中指定 int 字段的值
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @return int 值
+     * @throws JsonSyntaxException 字段不存在或不是数字时抛出
      */
     public static int getAsInt(JsonObject pJson, String pMemberName) {
         if (pJson.has(pMemberName)) {
@@ -356,12 +550,25 @@ public class GsonUtils {
     }
 
     /**
-     * Gets the integer value of the field on the JsonObject with the given name, or the given default value if the field is missing.
+     * 获取 JsonObject 中指定 int 字段的值，不存在时返回默认值
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @param pFallback   默认值
+     * @return int 值，或默认值
      */
     public static int getAsInt(JsonObject pJson, String pMemberName, int pFallback) {
         return pJson.has(pMemberName) ? convertToInt(pJson.get(pMemberName), pMemberName) : pFallback;
     }
 
+    /**
+     * 将 JsonElement 转换为 byte
+     *
+     * @param pJson       JsonElement 对象
+     * @param pMemberName 字段名（用于错误提示）
+     * @return byte 值
+     * @throws JsonSyntaxException 不是数字类型时抛出
+     */
     public static byte convertToByte(JsonElement pJson, String pMemberName) {
         if (pJson.isJsonPrimitive() && pJson.getAsJsonPrimitive().isNumber()) {
             return pJson.getAsByte();
@@ -370,6 +577,14 @@ public class GsonUtils {
         }
     }
 
+    /**
+     * 获取 JsonObject 中指定 byte 字段的值
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @return byte 值
+     * @throws JsonSyntaxException 字段不存在或不是数字时抛出
+     */
     public static byte getAsByte(JsonObject pJson, String pMemberName) {
         if (pJson.has(pMemberName)) {
             return convertToByte(pJson.get(pMemberName), pMemberName);
@@ -378,10 +593,26 @@ public class GsonUtils {
         }
     }
 
+    /**
+     * 获取 JsonObject 中指定 byte 字段的值，不存在时返回默认值
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @param pFallback   默认值
+     * @return byte 值，或默认值
+     */
     public static byte getAsByte(JsonObject pJson, String pMemberName, byte pFallback) {
         return pJson.has(pMemberName) ? convertToByte(pJson.get(pMemberName), pMemberName) : pFallback;
     }
 
+    /**
+     * 将 JsonElement 转换为 char
+     *
+     * @param pJson       JsonElement 对象
+     * @param pMemberName 字段名（用于错误提示）
+     * @return char 值
+     * @throws JsonSyntaxException 不是数字类型时抛出
+     */
     public static char convertToCharacter(JsonElement pJson, String pMemberName) {
         if (pJson.isJsonPrimitive() && pJson.getAsJsonPrimitive().isNumber()) {
             return pJson.getAsCharacter();
@@ -390,6 +621,14 @@ public class GsonUtils {
         }
     }
 
+    /**
+     * 获取 JsonObject 中指定 char 字段的值
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @return char 值
+     * @throws JsonSyntaxException 字段不存在或不是数字时抛出
+     */
     public static char getAsCharacter(JsonObject pJson, String pMemberName) {
         if (pJson.has(pMemberName)) {
             return convertToCharacter(pJson.get(pMemberName), pMemberName);
@@ -398,10 +637,26 @@ public class GsonUtils {
         }
     }
 
+    /**
+     * 获取 JsonObject 中指定 char 字段的值，不存在时返回默认值
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @param pFallback   默认值
+     * @return char 值，或默认值
+     */
     public static char getAsCharacter(JsonObject pJson, String pMemberName, char pFallback) {
         return pJson.has(pMemberName) ? convertToCharacter(pJson.get(pMemberName), pMemberName) : pFallback;
     }
 
+    /**
+     * 将 JsonElement 转换为 BigDecimal
+     *
+     * @param pJson       JsonElement 对象
+     * @param pMemberName 字段名（用于错误提示）
+     * @return BigDecimal 值
+     * @throws JsonSyntaxException 不是数字类型时抛出
+     */
     public static BigDecimal convertToBigDecimal(JsonElement pJson, String pMemberName) {
         if (pJson.isJsonPrimitive() && pJson.getAsJsonPrimitive().isNumber()) {
             return pJson.getAsBigDecimal();
@@ -410,6 +665,14 @@ public class GsonUtils {
         }
     }
 
+    /**
+     * 获取 JsonObject 中指定 BigDecimal 字段的值
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @return BigDecimal 值
+     * @throws JsonSyntaxException 字段不存在或不是数字时抛出
+     */
     public static BigDecimal getAsBigDecimal(JsonObject pJson, String pMemberName) {
         if (pJson.has(pMemberName)) {
             return convertToBigDecimal(pJson.get(pMemberName), pMemberName);
@@ -418,10 +681,26 @@ public class GsonUtils {
         }
     }
 
+    /**
+     * 获取 JsonObject 中指定 BigDecimal 字段的值，不存在时返回默认值
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @param pFallback   默认值
+     * @return BigDecimal 值，或默认值
+     */
     public static BigDecimal getAsBigDecimal(JsonObject pJson, String pMemberName, BigDecimal pFallback) {
         return pJson.has(pMemberName) ? convertToBigDecimal(pJson.get(pMemberName), pMemberName) : pFallback;
     }
 
+    /**
+     * 将 JsonElement 转换为 BigInteger
+     *
+     * @param pJson       JsonElement 对象
+     * @param pMemberName 字段名（用于错误提示）
+     * @return BigInteger 值
+     * @throws JsonSyntaxException 不是数字类型时抛出
+     */
     public static BigInteger convertToBigInteger(JsonElement pJson, String pMemberName) {
         if (pJson.isJsonPrimitive() && pJson.getAsJsonPrimitive().isNumber()) {
             return pJson.getAsBigInteger();
@@ -430,6 +709,14 @@ public class GsonUtils {
         }
     }
 
+    /**
+     * 获取 JsonObject 中指定 BigInteger 字段的值
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @return BigInteger 值
+     * @throws JsonSyntaxException 字段不存在或不是数字时抛出
+     */
     public static BigInteger getAsBigInteger(JsonObject pJson, String pMemberName) {
         if (pJson.has(pMemberName)) {
             return convertToBigInteger(pJson.get(pMemberName), pMemberName);
@@ -438,10 +725,26 @@ public class GsonUtils {
         }
     }
 
+    /**
+     * 获取 JsonObject 中指定 BigInteger 字段的值，不存在时返回默认值
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @param pFallback   默认值
+     * @return BigInteger 值，或默认值
+     */
     public static BigInteger getAsBigInteger(JsonObject pJson, String pMemberName, BigInteger pFallback) {
         return pJson.has(pMemberName) ? convertToBigInteger(pJson.get(pMemberName), pMemberName) : pFallback;
     }
 
+    /**
+     * 将 JsonElement 转换为 short
+     *
+     * @param pJson       JsonElement 对象
+     * @param pMemberName 字段名（用于错误提示）
+     * @return short 值
+     * @throws JsonSyntaxException 不是数字类型时抛出
+     */
     public static short convertToShort(JsonElement pJson, String pMemberName) {
         if (pJson.isJsonPrimitive() && pJson.getAsJsonPrimitive().isNumber()) {
             return pJson.getAsShort();
@@ -450,6 +753,14 @@ public class GsonUtils {
         }
     }
 
+    /**
+     * 获取 JsonObject 中指定 short 字段的值
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @return short 值
+     * @throws JsonSyntaxException 字段不存在或不是数字时抛出
+     */
     public static short getAsShort(JsonObject pJson, String pMemberName) {
         if (pJson.has(pMemberName)) {
             return convertToShort(pJson.get(pMemberName), pMemberName);
@@ -458,12 +769,25 @@ public class GsonUtils {
         }
     }
 
+    /**
+     * 获取 JsonObject 中指定 short 字段的值，不存在时返回默认值
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @param pFallback   默认值
+     * @return short 值，或默认值
+     */
     public static short getAsShort(JsonObject pJson, String pMemberName, short pFallback) {
         return pJson.has(pMemberName) ? convertToShort(pJson.get(pMemberName), pMemberName) : pFallback;
     }
 
     /**
-     * Gets the given JsonElement as a JsonObject.  Expects the second parameter to be the name of the element's field if an error message needs to be thrown.
+     * 将 JsonElement 转换为 JsonObject
+     *
+     * @param pJson       JsonElement 对象
+     * @param pMemberName 字段名（用于错误提示）
+     * @return JsonObject 对象
+     * @throws JsonSyntaxException 不是对象类型时抛出
      */
     public static JsonObject convertToJsonObject(JsonElement pJson, String pMemberName) {
         if (pJson.isJsonObject()) {
@@ -473,6 +797,14 @@ public class GsonUtils {
         }
     }
 
+    /**
+     * 获取 JsonObject 中指定 JsonObject 字段的值
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @return JsonObject 值
+     * @throws JsonSyntaxException 字段不存在或不是对象类型时抛出
+     */
     public static JsonObject getAsJsonObject(JsonObject pJson, String pMemberName) {
         if (pJson.has(pMemberName)) {
             return convertToJsonObject(pJson.get(pMemberName), pMemberName);
@@ -482,7 +814,12 @@ public class GsonUtils {
     }
 
     /**
-     * Gets the JsonObject field on the JsonObject with the given name, or the given default value if the field is missing.
+     * 获取 JsonObject 中指定 JsonObject 字段的值，不存在时返回默认值
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @param pFallback   默认值
+     * @return JsonObject 值，或默认值
      */
     @Nullable
     @Contract("_,_,!null->!null;_,_,null->_")
@@ -491,7 +828,12 @@ public class GsonUtils {
     }
 
     /**
-     * Gets the given JsonElement as a JsonArray.  Expects the second parameter to be the name of the element's field if an error message needs to be thrown.
+     * 将 JsonElement 转换为 JsonArray
+     *
+     * @param pJson       JsonElement 对象
+     * @param pMemberName 字段名（用于错误提示）
+     * @return JsonArray 对象
+     * @throws JsonSyntaxException 不是数组类型时抛出
      */
     public static JsonArray convertToJsonArray(JsonElement pJson, String pMemberName) {
         if (pJson.isJsonArray()) {
@@ -502,7 +844,12 @@ public class GsonUtils {
     }
 
     /**
-     * Gets the JsonArray field on the JsonObject with the given name.
+     * 获取 JsonObject 中指定 JsonArray 字段的值
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @return JsonArray 值
+     * @throws JsonSyntaxException 字段不存在或不是数组类型时抛出
      */
     public static JsonArray getAsJsonArray(JsonObject pJson, String pMemberName) {
         if (pJson.has(pMemberName)) {
@@ -513,7 +860,12 @@ public class GsonUtils {
     }
 
     /**
-     * Gets the JsonArray field on the JsonObject with the given name, or the given default value if the field is missing.
+     * 获取 JsonObject 中指定 JsonArray 字段的值，不存在时返回默认值
+     *
+     * @param pJson       JsonObject 对象
+     * @param pMemberName 字段名
+     * @param pFallback   默认值
+     * @return JsonArray 值，或默认值
      */
     @Nullable
     @Contract("_,_,!null->!null;_,_,null->_")
@@ -521,6 +873,17 @@ public class GsonUtils {
         return pJson.has(pMemberName) ? convertToJsonArray(pJson.get(pMemberName), pMemberName) : pFallback;
     }
 
+    /**
+     * 将 JsonElement 反序列化为指定类型的对象
+     *
+     * @param <T>        目标类型
+     * @param pJson      JsonElement 对象，允许为 null
+     * @param pMemberName 字段名（用于错误提示）
+     * @param pContext   反序列化上下文
+     * @param pAdapter   目标类型 Class
+     * @return 反序列化后的对象
+     * @throws JsonSyntaxException 字段不存在或为 null 时抛出
+     */
     public static <T> T convertToObject(@Nullable JsonElement pJson, String pMemberName, JsonDeserializationContext pContext, Class<? extends T> pAdapter) {
         if (pJson != null) {
             return pContext.deserialize(pJson, pAdapter);
@@ -529,6 +892,17 @@ public class GsonUtils {
         }
     }
 
+    /**
+     * 获取 JsonObject 中指定字段并反序列化为指定类型
+     *
+     * @param <T>        目标类型
+     * @param pJson      JsonObject 对象
+     * @param pMemberName 字段名
+     * @param pContext   反序列化上下文
+     * @param pAdapter   目标类型 Class
+     * @return 反序列化后的对象
+     * @throws JsonSyntaxException 字段不存在时抛出
+     */
     public static <T> T getAsObject(JsonObject pJson, String pMemberName, JsonDeserializationContext pContext, Class<? extends T> pAdapter) {
         if (pJson.has(pMemberName)) {
             return convertToObject(pJson.get(pMemberName), pMemberName, pContext, pAdapter);
@@ -537,6 +911,17 @@ public class GsonUtils {
         }
     }
 
+    /**
+     * 获取 JsonObject 中指定字段并反序列化为指定类型，不存在时返回默认值
+     *
+     * @param <T>        目标类型
+     * @param pJson      JsonObject 对象
+     * @param pMemberName 字段名
+     * @param pFallback  默认值
+     * @param pContext   反序列化上下文
+     * @param pAdapter   目标类型 Class
+     * @return 反序列化后的对象，或默认值
+     */
     @Nullable
     @Contract("_,_,!null,_,_->!null;_,_,null,_,_->_")
     public static <T> T getAsObject(
@@ -546,7 +931,10 @@ public class GsonUtils {
     }
 
     /**
-     * Gets a human-readable description of the given JsonElement's type.  For example: "a number (4)"
+     * 获取 JsonElement 的类型描述
+     *
+     * @param pJson JsonElement 对象，允许为 null
+     * @return 人类可读的类型描述
      */
     public static String getType(@Nullable JsonElement pJson) {
         String s = StringUtils.abbreviateMiddle(String.valueOf(pJson), "...", 10);
@@ -574,6 +962,17 @@ public class GsonUtils {
         }
     }
 
+    /**
+     * 从 Reader 中读取并反序列化为指定类型，允许返回 null
+     *
+     * @param <T>       目标类型
+     * @param pGson     Gson 实例
+     * @param pReader   Reader 对象
+     * @param pAdapter  目标类型 Class
+     * @param pLenient  是否宽松解析
+     * @return 反序列化后的对象，可能为 null
+     * @throws JsonParseException 解析失败时抛出
+     */
     @Nullable
     public static <T> T fromNullableJson(Gson pGson, Reader pReader, Class<T> pAdapter, boolean pLenient) {
         try {
@@ -585,6 +984,17 @@ public class GsonUtils {
         }
     }
 
+    /**
+     * 从 Reader 中读取并反序列化为指定类型，不允许返回 null
+     *
+     * @param <T>       目标类型
+     * @param pGson     Gson 实例
+     * @param pReader   Reader 对象
+     * @param pAdapter  目标类型 Class
+     * @param pLenient  是否宽松解析
+     * @return 反序列化后的对象
+     * @throws JsonParseException 解析失败或结果为 null 时抛出
+     */
     public static <T> T fromJson(Gson pGson, Reader pReader, Class<T> pAdapter, boolean pLenient) {
         T t = fromNullableJson(pGson, pReader, pAdapter, pLenient);
         if (t == null) {
@@ -594,6 +1004,17 @@ public class GsonUtils {
         }
     }
 
+    /**
+     * 从 Reader 中读取并反序列化为指定类型，允许返回 null
+     *
+     * @param <T>       目标类型
+     * @param pGson     Gson 实例
+     * @param pReader   Reader 对象
+     * @param pType     目标类型 Token
+     * @param pLenient  是否宽松解析
+     * @return 反序列化后的对象，可能为 null
+     * @throws JsonParseException 解析失败时抛出
+     */
     @Nullable
     public static <T> T fromNullableJson(Gson pGson, Reader pReader, TypeToken<T> pType, boolean pLenient) {
         try {
@@ -605,6 +1026,17 @@ public class GsonUtils {
         }
     }
 
+    /**
+     * 从 Reader 中读取并反序列化为指定类型，不允许返回 null
+     *
+     * @param <T>       目标类型
+     * @param pGson     Gson 实例
+     * @param pReader   Reader 对象
+     * @param pType     目标类型 Token
+     * @param pLenient  是否宽松解析
+     * @return 反序列化后的对象
+     * @throws JsonParseException 解析失败或结果为 null 时抛出
+     */
     public static <T> T fromJson(Gson pGson, Reader pReader, TypeToken<T> pType, boolean pLenient) {
         T t = fromNullableJson(pGson, pReader, pType, pLenient);
         if (t == null) {
@@ -614,61 +1046,178 @@ public class GsonUtils {
         }
     }
 
+    /**
+     * 从 JSON 字符串中读取并反序列化为指定类型，允许返回 null
+     *
+     * @param <T>       目标类型
+     * @param pGson     Gson 实例
+     * @param pJson     JSON 字符串
+     * @param pType     目标类型 Token
+     * @param pLenient  是否宽松解析
+     * @return 反序列化后的对象，可能为 null
+     * @throws JsonParseException 解析失败时抛出
+     */
     @Nullable
     public static <T> T fromNullableJson(Gson pGson, String pJson, TypeToken<T> pType, boolean pLenient) {
         return fromNullableJson(pGson, new StringReader(pJson), pType, pLenient);
     }
 
+    /**
+     * 从 JSON 字符串中读取并反序列化为指定类型
+     *
+     * @param <T>       目标类型
+     * @param pGson     Gson 实例
+     * @param pJson     JSON 字符串
+     * @param pAdapter  目标类型 Class
+     * @param pLenient  是否宽松解析
+     * @return 反序列化后的对象
+     * @throws JsonParseException 解析失败或结果为 null 时抛出
+     */
     public static <T> T fromJson(Gson pGson, String pJson, Class<T> pAdapter, boolean pLenient) {
         return fromJson(pGson, new StringReader(pJson), pAdapter, pLenient);
     }
 
+    /**
+     * 从 JSON 字符串中读取并反序列化为指定类型，允许返回 null
+     *
+     * @param <T>       目标类型
+     * @param pGson     Gson 实例
+     * @param pJson     JSON 字符串
+     * @param pAdapter  目标类型 Class
+     * @param pLenient  是否宽松解析
+     * @return 反序列化后的对象，可能为 null
+     * @throws JsonParseException 解析失败时抛出
+     */
     @Nullable
     public static <T> T fromNullableJson(Gson pGson, String pJson, Class<T> pAdapter, boolean pLenient) {
         return fromNullableJson(pGson, new StringReader(pJson), pAdapter, pLenient);
     }
 
+    /**
+     * 从 Reader 中读取并反序列化为指定类型
+     *
+     * @param <T>       目标类型
+     * @param pGson     Gson 实例
+     * @param pReader   Reader 对象
+     * @param pType     目标类型 Token
+     * @return 反序列化后的对象
+     * @throws JsonParseException 解析失败或结果为 null 时抛出
+     */
     public static <T> T fromJson(Gson pGson, Reader pReader, TypeToken<T> pType) {
         return fromJson(pGson, pReader, pType, false);
     }
 
+    /**
+     * 从 JSON 字符串中读取并反序列化为指定类型，允许返回 null
+     *
+     * @param <T>       目标类型
+     * @param pGson     Gson 实例
+     * @param pJson     JSON 字符串
+     * @param pType     目标类型 Token
+     * @return 反序列化后的对象，可能为 null
+     * @throws JsonParseException 解析失败时抛出
+     */
     @Nullable
     public static <T> T fromNullableJson(Gson pGson, String pJson, TypeToken<T> pType) {
         return fromNullableJson(pGson, pJson, pType, false);
     }
 
+    /**
+     * 从 Reader 中读取并反序列化为指定类型
+     *
+     * @param <T>       目标类型
+     * @param pGson     Gson 实例
+     * @param pReader   Reader 对象
+     * @param pJsonClass 目标类型 Class
+     * @return 反序列化后的对象
+     * @throws JsonParseException 解析失败或结果为 null 时抛出
+     */
     public static <T> T fromJson(Gson pGson, Reader pReader, Class<T> pJsonClass) {
         return fromJson(pGson, pReader, pJsonClass, false);
     }
 
+    /**
+     * 从 JSON 字符串中读取并反序列化为指定类型
+     *
+     * @param <T>       目标类型
+     * @param pGson     Gson 实例
+     * @param pJson     JSON 字符串
+     * @param pAdapter  目标类型 Class
+     * @return 反序列化后的对象
+     * @throws JsonParseException 解析失败或结果为 null 时抛出
+     */
     public static <T> T fromJson(Gson pGson, String pJson, Class<T> pAdapter) {
         return fromJson(pGson, pJson, pAdapter, false);
     }
 
+    /**
+     * 解析 JSON 字符串为 JsonObject
+     *
+     * @param pJson     JSON 字符串
+     * @param pLenient  是否宽松解析
+     * @return JsonObject 对象
+     */
     public static JsonObject parse(String pJson, boolean pLenient) {
         return parse(new StringReader(pJson), pLenient);
     }
 
+    /**
+     * 从 Reader 中解析为 JsonObject
+     *
+     * @param pReader   Reader 对象
+     * @param pLenient  是否宽松解析
+     * @return JsonObject 对象
+     */
     public static JsonObject parse(Reader pReader, boolean pLenient) {
         return fromJson(GSON, pReader, JsonObject.class, pLenient);
     }
 
+    /**
+     * 解析 JSON 字符串为 JsonObject
+     *
+     * @param pJson JSON 字符串
+     * @return JsonObject 对象
+     */
     public static JsonObject parse(String pJson) {
         return parse(pJson, false);
     }
 
+    /**
+     * 从 Reader 中解析为 JsonObject
+     *
+     * @param pReader Reader 对象
+     * @return JsonObject 对象
+     */
     public static JsonObject parse(Reader pReader) {
         return parse(pReader, false);
     }
 
+    /**
+     * 解析 JSON 字符串为 JsonArray
+     *
+     * @param pString JSON 字符串
+     * @return JsonArray 对象
+     */
     public static JsonArray parseArray(String pString) {
         return parseArray(new StringReader(pString));
     }
 
+    /**
+     * 从 Reader 中解析为 JsonArray
+     *
+     * @param pReader Reader 对象
+     * @return JsonArray 对象
+     */
     public static JsonArray parseArray(Reader pReader) {
         return fromJson(GSON, pReader, JsonArray.class, false);
     }
 
+    /**
+     * 将 JsonElement 转换为稳定的字符串表示（键按字母序排序）
+     *
+     * @param pJson JsonElement 对象
+     * @return 稳定的 JSON 字符串
+     */
     public static String toStableString(JsonElement pJson) {
         StringWriter stringwriter = new StringWriter();
         JsonWriter jsonwriter = new JsonWriter(stringwriter);
@@ -682,6 +1231,14 @@ public class GsonUtils {
         return stringwriter.toString();
     }
 
+    /**
+     * 将 JsonElement 写入 JsonWriter
+     *
+     * @param pWriter     JsonWriter 对象
+     * @param pJsonElement 要写入的 JsonElement，允许为 null
+     * @param pSorter     键排序器，允许为 null（不排序）
+     * @throws IOException 写入失败时抛出
+     */
     public static void writeValue(JsonWriter pWriter, @Nullable JsonElement pJsonElement, @Nullable Comparator<String> pSorter) throws IOException {
         if (pJsonElement == null || pJsonElement.isJsonNull()) {
             pWriter.nullValue();
@@ -718,6 +1275,13 @@ public class GsonUtils {
         }
     }
 
+    /**
+     * 如果需要，按键排序 Map 条目
+     *
+     * @param pEntries  原始条目集合
+     * @param pSorter   键排序器，为 null 时不排序
+     * @return 排序后的条目集合
+     */
     private static Collection<Map.Entry<String, JsonElement>> sortByKeyIfNeeded(
             Collection<Map.Entry<String, JsonElement>> pEntries, @Nullable Comparator<String> pSorter
     ) {

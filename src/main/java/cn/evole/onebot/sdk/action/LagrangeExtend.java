@@ -8,10 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Project: onebot-sdk
- * @Author: cnlimiter
- * @CreateTime: 2025/2/9 01:40
- * @Description:
+ * @author cnlimiter
+ * @since 2025/2/9 01:40
  */
 public interface LagrangeExtend {
     /**

@@ -4,10 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 /**
- * @Project: onebot-sdk
- * @Author: cnlimiter
- * @CreateTime: 2025/2/9 01:39
- * @Description:
+ * @author cnlimiter
+ * @since 2025/2/9 01:39
  */
 @Data
 public class GetStatusResp {

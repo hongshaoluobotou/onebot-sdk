@@ -6,10 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * @Project: onebot-sdk
- * @Author: cnlimiter
- * @CreateTime: 2024/1/17 19:35
- * @Description:
+ * @author cnlimiter
+ * @since 2024/1/17 19:35
  */
 @Data
 @NoArgsConstructor
