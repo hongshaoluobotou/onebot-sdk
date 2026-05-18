@@ -11,6 +11,31 @@ import lombok.experimental.SuperBuilder;
 /**
  * 群聊消息
  *
+ * <p>例子：获取到群聊事件 {@code GroupMessageEvent} 后，
+ * 用{@code for (ArrayMsg item : event.getArrayMsg()){}}逐条拆分消息，
+ * 再根据{@code MsgType type = item.getType()}判断不同的消息类型 text/image/face/dice 来处理。
+ * </p>
+ *
+ * <pre>{@code
+ * void handleBySwitch() {
+ *     GroupMessageEvent event = ...
+ *
+ *     // 把不同格式的 message 统一成 arrayMsg 并缓存，以方便后面循环处理
+ *     List<ArrayMsg> arrayMsgs = BotUtils.rawToArrayMsg(event.getRawMessage());
+ *
+ *     for (ArrayMsg item : arrayMsgs) {
+ *         MsgType type = item.getType();
+ *         Map<String, String> data = item.getData();
+ *         switch(type) {
+ *             case text:
+ *                 // TODO: 做点什么
+ *             case at:
+ *                 // TODO: 做点什么
+ *         }
+ *     }
+ * }
+ * }</pre>
+ *
  * @author cnlimiter
  */
 @Data
